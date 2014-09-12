@@ -1,0 +1,31 @@
+bugfixes -
+  If you decide to use stock ROT 1.4, here are some serious bugs to be aware of:
+   - "!" crashing exploit, easy way to deliberately crash the MUD. The problem
+     lies in comm.c where it checks for spamming. Make sure that d->character
+     exists before allowing "!" (or at least before warning/reporting spamming.)
+   - built-in webserver; just disable it.
+   - zero-weight gem containers/pouches; buy thousands of them and drop them to
+     freeze the MUD for a long time. Containers that make their contents
+     weigh less may also pose a problem.
+   - others that I forget
+
+scripts -
+  Preliminary Python scripting support for mobs and objects. Very incomplete.
+  The most complete example is in scripts/areas/newthalos/temple.py (Safie)
+  One currently unused feature that could be interesting to use is
+  pathfinding. Setting the NPC's path will make it walk every mobile_update
+  (4 seconds) along its path. This could be occasionally recalculated if the
+  target is moving, although a player would easily outrun it.
+
+  Scripting-related commands:
+    scriptsetup <mob/obj> <vnum> - Apply script changes to a vnum. Only
+                                   affects newly-created objects. Need to
+                                   run this after (re)-assigning a script
+                                   to a mob or object in OLC.
+    python <command>             - Runs command in python. DANGEROUS. For
+                                   security reasons, you may want to
+                                   disable this command entirely.
+  For OLC (medit, oedit):
+    script <module>:<class>      - Sets the mob/obj to use this class.
+                                   Need to run scriptsetup to take effect.
+                                   Example: script areas.newthalos.temple:Safie

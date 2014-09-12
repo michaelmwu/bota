@@ -1,0 +1,120 @@
+
+    char buf[MAX_STRING_LENGTH];
+    CHAR_DATA *victim;
+    ROOM_INDEX_DATA *location;
+    int track;
+
+    if (IS_NPC(ch) && !IS_SET(ch->act,ACT_PET))
+    {
+	send_to_char("Only players can recall.\n\r",ch);
+	return;
+    }
+  
+    act( "$n prays for transportation!", ch, 0, 0, TO_ROOM );
+
+    if ( ch->alignment < 0 )
+    {
+	if ( ( location = get_room_index( ROOM_VNUM_TEMPLEB ) ) == NULL )
+	{
+	    send_to_char( "You are completely lost.\n\r", ch );
+	    return;
+	}
+    }
+    else
+    {
+	if ( ( location = get_room_index( ROOM_VNUM_TEMPLE ) ) == NULL )
+	{
+	    send_to_char( "You are completely lost.\n\r", ch );
+	    return;
+	}
+    }
+
+    if (!IS_NPC(ch) && !IS_SET(ch->act,PLR_TWIT))
+    {
+        if(is_clan(ch))
+            location = get_room_index( ch->clan->hall );
+        else
+            location = get_room_index(
+              ch->alignment < 0 ? ROOM_VNUM_TEMPLEB:ROOM_VNUM_TEMPLE );
+    }
+
+    else if (IS_NPC(ch) && IS_SET(ch->act,ACT_PET))
+    {
+        if(is_clan(ch->master))
+            location = get_room_index( ch->master->clan->hall );
+        else
+            location = get_room_index(
+              ch->master->alignment < 0 ?
+              ROOM_VNUM_TEMPLEB:ROOM_VNUM_TEMPLE );
+    }
+    else location = get_room_index(ROOM_VNUM_LIMBO);
+
+    if ( ch->in_room == location )
+    {
+        logf("%s recalled to same room %d",ch->name, ch->in_room->vnum);
+	return;
+    }
+
+    if ( ( IS_SET(ch->in_room->room_flags, ROOM_NO_RECALL)
+    ||   IS_AFFECTED(ch, AFF_CURSE))
+    &&   (ch->level <= HERO) )
+    {
+	act( "$G has forsaken you.", ch, NULL, NULL, TO_CHAR );
+	return;
+    }
+
+    if ( ( victim = ch->fighting ) != NULL )
+    {
+	int lose,skill;
+
+	skill = get_skill(ch,gsn_recall);
+
+	if ( number_percent() < 80 * skill / 100 )
+	{
+	    check_improve(ch,gsn_recall,FALSE,6);
+	    WAIT_STATE( ch, 4 );
+	    sprintf( buf, "You failed!.\n\r");
+	    send_to_char( buf, ch );
+	    return;
+	}
+
+	lose = (ch->desc != NULL) ? 25 : 50;
+	gain_exp( ch, 0 - lose );
+	check_improve(ch,gsn_recall,TRUE,4);
+	sprintf( buf, "You recall from combat!  You lose %d exps.\n\r", lose );
+	send_to_char( buf, ch );
+        if ( !IS_NPC(ch) )
+        {
+	    if ( !IS_NPC(victim) && ch->attacker == TRUE)
+	    {
+		send_to_char( "The {RWrath of Thoth {YZAPS{x your butt on the way out!\n\r", ch);
+		act( "$n is {Yzapped{x in the butt by a lightning bolt from above!", ch, NULL, NULL, TO_ROOM );
+		ch->hit -= (ch->hit/4);
+	    }
+        }
+	stop_fighting( ch, TRUE );
+    }
+
+    ch->move *= .75;
+    act( "$n disappears.", ch, NULL, NULL, TO_ROOM );
+    if (IS_NPC(ch) || !IS_IMMORTAL(ch))
+    {
+	for (track = MAX_TRACK-1; track > 0; track--)
+	{
+	    ch->track_to[track] = ch->track_to[track-1];
+	    ch->track_from[track] = ch->track_from[track-1];
+	}
+	ch->track_from[0] = ch->in_room->vnum;
+	ch->track_to[0] = 0;
+    }
+    char_from_room( ch );
+    char_to_room( ch, location );
+    act( "$n appears in the room.", ch, NULL, NULL, TO_ROOM );
+    do_look( ch, "auto" );
+    
+    if (ch->pet != NULL)
+	do_recall(ch->pet,"");
+
+    return;
+}
+

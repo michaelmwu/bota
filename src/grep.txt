@@ -1,0 +1,2 @@
+interp.c:#define NFO CMD_INFO
+interp.h:#define CMD_INFO	3

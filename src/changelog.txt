@@ -1,0 +1,76 @@
+Changelog for BOTA
+--------------------------------------------------------------------------------------------------------------
+
+02/19/05:
+-mset (char) act added
+-aedit purge added
+-just "aedit reset" works now
+-Hero village
+
+02/18/05:
+-ACT_NO_QUEST added, prevents mob from being generated from a quest.
+-ROOM_NO_RECALL allows people to step into gates now
+
+02/17/05:
+-North Pole opened
+
+02/15/05:
+-Circle nerfed.
+-One loot works now.
+-generate quest fixed.
+
+02/13/05:
+-Autoquesting improved - 2 new quest eqs, level range increased, removed checking for invis, summon, and align, and 3 more quest tokens
+-Vacillating aura will dissapate on mobs now.
+
+02/08/05:
+-HPs can now rise above 30000, as format has been changed to long.
+
+02/07/05:
+-Help system fixed.
+
+02/06/05:
+-New Clans System.
+-Smelly Potion quest point edited out.
+-Fixed guilding/promoting NPCs.
+-Rank and clan show up in who and look room and look char.
+-Fixed clanlist
+-Energy drain drains more, doesn't take away XP.
+
+02/04/05:
+-New Arena System + Maps (Forest & Castle).
+
+02/03/05:
+-Immortals can now gain any skill.
+
+02/02/05:
+-String Editor has been modified for $ and @ to terminate string (MM2K is stupid).
+
+02/01/05:
+-Mana healing fixed.
+
+01/31/05:
+-Death changed so only PK makes a corpse.
+-Feed made stronger, sucks mana.
+-Circle at 80, 70 for vampires and liches, respectively.
+
+01/30/05:
+-Manashield <on|off>
+-Sacrifice can no longer sac from inventory.
+-Junk command sacs from inventory. 
+-Manashields added for mages and clerics, and 2nd tier equivalents.
+
+01/27/05:
+-Shockwave for mages, druids, and 2nd tier equivalents
+-Divine wrath for clerics and priests
+-Magic missile boosted
+-Mages, Clerics, Thieves, Druids, and 2nd tier equivalents boosted in hp
+-Rangers and striders bumped a bit up on hp.
+-Weak Races boosted.
+
+01/26/05:
+-Dayor's Mansion
+
+Sometime Before:
+-Dreams
+-Mud started UP!

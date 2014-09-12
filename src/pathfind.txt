@@ -1,0 +1,62 @@
+These instructions will help you add the pathfinding code by Brian Graversen.
+
+* First add pathfind.c to your Makefile.
+* then in merc.h add the following
+
+/* 
+ * This structure is used for the
+ * pathfinding algorithm.
+ */
+typedef struct heap_data
+{
+  sh_int             iVertice;
+  ROOM_INDEX_DATA ** knude;
+  int                size;
+} HEAP;
+
+/*
+ * Now we must edit the exit_data structure,
+ * so it contains this varible.
+ */
+  bool      color;
+
+/*
+ * Now we must edit the room_index_data
+ * structure so it contains these variables.
+ */
+  sh_int    heap_index;
+  sh_int    steps;
+  bool      visited;
+
+/*
+ * Add the prototype for the pathfinding function.
+ */
+char *pathfind  args (( ROOM_INDEX_DATA *from, ROOM_INDEX_DATA *to ));
+
+* Now the pathfinding function is ready to compile.
+* If you wish to test it, you could create a mud command like this :
+
+void do_pathfind(CHAR_DATA *ch, char *argument)
+{
+  CHAR_DATA *victim;
+  char arg[MAX_STRING_LENGTH];
+  char buf[MAX_STRING_LENGTH];
+  char *path;
+    
+  one_argument(argument, arg);
+  if ((victim = get_char_world(ch, arg)) == NULL) return;
+    
+  if ((path = pathfind(ch->in_room, victim->in_room)) != NULL)
+    sprintf(buf, "Path: %s\n\r", path);
+  else
+    sprintf(buf, "Path: Unknown.\n\r");
+  send_to_char(buf, ch);
+  
+  return;
+}
+
+* Remember to add it to interp.c and merc.h :)
+
+Have fun with pathfinding
+
+Brian Graversen
